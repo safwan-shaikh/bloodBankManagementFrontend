@@ -20,6 +20,19 @@ const BloodBank = () => {
 
     });
 
+
+    const [bankFilters, setBankFilters] = useState({
+        b_name: '',
+        phone: '',
+        email: '',
+        country: '',
+        state: '',
+        city: '',
+        locality: '',
+
+    });
+    const [allBanks, setAllBanks] = useState([])
+
     return (
         <>
         </>

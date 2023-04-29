@@ -140,6 +140,57 @@ const BloodBank = () => {
     }
     return (
         <>
+            <div className="pollutionContainer">
+                <LoadingBar
+                    color='#f11946'
+                    progress={progress}
+                    onLoaderFinished={() => setProgress(0)} />
+                <CustomTable
+                    columns={columns}
+                    title={"Blood Banks"}
+                    btnText={"Create Blood Bank"}
+                    data={allBanks}
+                    applyFilters={applyFilters}
+                    hClick={() => { setOpen(!open) }} />
+            </div>
+            <Dialog
+                open={open}
+                scroll={"paper"}
+                aria-labelledby="scroll-dialog-title"
+                aria-describedby="scroll-dialog-description"
+            >
+                <DialogTitle id="scroll-dialog-title">{editMode ? 'Update' : 'Create'} Blood Bank</DialogTitle>
+                <DialogContent dividers={true}>
+                    <TextField className="formInputs" id="outlined-basic" value={bankDetails?.b_name} name="b_name" onChange={hChange} label="Name" variant="outlined" />
+                    <TextField className="formInputs" id="outlined-basic" disabled={editMode} value={bankDetails?.phone} name="phone" onChange={hChange} label="Phone" variant="outlined" />
+                    <TextField className="formInputs" id="outlined-basic" value={bankDetails?.email} name="email" onChange={hChange} label="Email" variant="outlined" />
+                    <TextField className="formInputs" id="outlined-basic" value={bankDetails?.country} name="country" onChange={hChange} label="Country" variant="outlined" />
+                    <TextField className="formInputs" id="outlined-basic" value={bankDetails?.state} name="state" onChange={hChange} label="State" variant="outlined" />
+                    <TextField className="formInputs" id="outlined-basic" value={bankDetails?.city} name="city" onChange={hChange} label="city" variant="outlined" />
+                    <TextField className="formInputs" id="outlined-basic" value={bankDetails?.locality} name="locality" onChange={hChange} label="locality" variant="outlined" />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button disabled={validations()} onClick={() => { editMode ? hUpdateBank() : hCreate() }}>{editMode ? 'Update' : 'Create'}</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={deleteBank?.open}
+                scroll={"paper"}
+                aria-labelledby="scroll-dialog-title"
+                aria-describedby="scroll-dialog-description"
+            >
+                <DialogTitle id="scroll-dialog-title">Delete Blood Bank</DialogTitle>
+                <DialogContent dividers={false}>
+                    <DialogContentText>
+                        Are you sure you want to delete the blood bank <span style={{ color: 'white', backgroundColor: '#e3970c', padding: '0 0.3rem', borderRadius: '0.5rem' }}>{deleteBank?.bname}</span> ?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" onClick={() => { setDeleteBank({ open: false, bname: '' }) }}>Cancel</Button>
+                    <Button variant="contained" style={{ backgroundColor: 'red' }} onClick={hDelete}>Delete</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };

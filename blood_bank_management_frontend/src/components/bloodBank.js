@@ -122,6 +122,22 @@ const BloodBank = () => {
                 console.log(response);
             });
     }
+
+    const hDelete = () => {
+        setProgress(65);
+        axios.delete(`http://localhost:8080/api/bloodBank/deleteBank/${deleteBank?.bid}`)
+            .then(res => {
+                setProgress(80);
+                dispatch(setPopupState({ status: 'show', message: typeof res?.data?.message == 'string' ? res?.data?.message : 'Success', type: 'success' }));
+                setProgress(100);
+                getAllBanks(bankFilters, () => { setDeleteBank({ open: false, bname: '', bid: 0 }) })
+            })
+            .catch(({ response }) => {
+                setProgress(100);
+                dispatch(setPopupState({ status: 'show', message: response?.data?.message || 'Something Went Wrong!', type: 'response' }));
+                console.log(response);
+            });
+    }
     return (
         <>
         </>

@@ -56,6 +56,72 @@ const BloodBank = () => {
             });
     }
 
+    const hChange = (e) => {
+        const { name, value } = e.target
+        setBankDetails({
+            ...bankDetails,
+            [name]: value,
+        })
+    }
+
+    const applyFilters = (name, value) => {
+        setBankFilters({
+            ...bankFilters,
+            [name]: value
+        })
+    }
+
+    const validations = () => {
+        for (let i = 0; i < Object?.keys(bankDetails)?.length; i++) {
+            let key = Object.keys(bankDetails)[i];
+            if (bankDetails[key]?.length <= 0) {
+                return true;
+            }
+        }
+
+        if (bankDetails?.phone?.length < 10) {
+            return true;
+        }
+
+        const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+
+        if (!emailRegex?.test(bankDetails?.email)) {
+            return true;
+        }
+        return false;
+    }
+
+    const hCreate = () => {
+        setProgress(65);
+        axios.post('http://localhost:8080/api/bloodBank/createBank', bankDetails)
+            .then(res => {
+                setProgress(80);
+                dispatch(setPopupState({ status: 'show', message: typeof res?.data?.message == 'string' ? res?.data?.message : 'Success', type: 'success' }));
+                setProgress(100);
+                getAllBanks(bankFilters, () => { setOpen(!open) })
+            })
+            .catch(({ response }) => {
+                setProgress(100);
+                dispatch(setPopupState({ status: 'show', message: response?.data?.message || 'Something Went Wrong!', type: 'response' }));
+                console.log(response);
+            });
+    }
+
+    const hUpdateBank = () => {
+        setProgress(65);
+        axios.patch(`http://localhost:8080/api/bloodBank/updateBank/${bankDetails?.blood_bank_id}`, bankDetails)
+            .then(res => {
+                setProgress(80);
+                dispatch(setPopupState({ status: 'show', message: typeof res?.data?.message == 'string' ? res?.data?.message : 'Success', type: 'success' }));
+                setProgress(100);
+                getAllBanks(bankFilters, () => { setOpen(!open); setEditMode(false) })
+            })
+            .catch(({ response }) => {
+                setProgress(100);
+                dispatch(setPopupState({ status: 'show', message: response?.data?.message || 'Something Went Wrong!', type: 'response' }));
+                console.log(response);
+            });
+    }
     return (
         <>
         </>
